@@ -1,0 +1,19 @@
+{
+  "name": "@opaque/next",
+  "version": "0.1.0",
+  "type": "module",
+  "exports": {
+    ".": {
+      "import": "./src/index.ts"
+    }
+  },
+  "scripts": {
+    "pack": "vp pack"
+  },
+  "dependencies": {
+    "@opaque/core": "workspace:*"
+  },
+  "peerDependencies": {
+    "next": ">=14.0.0"
+  }
+}

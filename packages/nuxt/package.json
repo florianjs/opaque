@@ -1,0 +1,17 @@
+{
+  "name": "@opaque/nuxt",
+  "version": "0.1.0",
+  "type": "module",
+  "exports": {
+    ".": {
+      "import": "./src/index.ts"
+    }
+  },
+  "scripts": {
+    "pack": "vp pack"
+  },
+  "dependencies": {
+    "@nuxt/kit": "^3.0.0",
+    "@opaque/core": "workspace:*"
+  }
+}

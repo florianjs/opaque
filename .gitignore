@@ -1,0 +1,50 @@
+# Dependencies
+node_modules/
+
+# Build outputs
+dist/
+apps/ui/dist/
+apps/server/dist/
+
+# Database
+*.db
+*.db-shm
+*.db-wal
+
+# Environment — never commit secrets
+.env
+.env.local
+.env.*.local
+
+# Vault runtime files
+apps/server/opaque.db
+apps/server/opaque.db-shm
+apps/server/opaque.db-wal
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Editor
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Logs
+*.log
+logs/
+
+# Bun
+.bun/
+
+# TypeScript
+*.tsbuildinfo
+
+# Test coverage
+coverage/
+
+
+# GitDual
+.gitdual.yml
+.gitdual/

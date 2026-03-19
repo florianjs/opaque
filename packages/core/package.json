@@ -1,0 +1,16 @@
+{
+  "name": "@opaque/core",
+  "version": "0.1.0",
+  "type": "module",
+  "exports": {
+    ".": {
+      "import": "./src/index.ts"
+    }
+  },
+  "scripts": {
+    "pack": "vp pack"
+  },
+  "dependencies": {
+    "@noble/ed25519": "^2.2.3"
+  }
+}

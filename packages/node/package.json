@@ -1,0 +1,16 @@
+{
+  "name": "@opaque/node",
+  "version": "0.1.0",
+  "type": "module",
+  "exports": {
+    ".": {
+      "import": "./src/index.ts"
+    }
+  },
+  "scripts": {
+    "pack": "vp pack"
+  },
+  "dependencies": {
+    "@opaque/core": "workspace:*"
+  }
+}
