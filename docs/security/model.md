@@ -2,17 +2,17 @@
 
 ## Threat model
 
-| Threat | Mitigation | Residual risk |
-|---|---|---|
-| **Secret values leaked to LLM/agent context** | SDK injects secrets server-side at boot, after context is established. Dashboard is write-only — values never displayed. | Agent with shell access and `OPAQUE_PRIVATE_KEY` can still call `opaque pull`. All access logged. |
-| **Secrets in git history** | Values never written to files — only the Ed25519 private key goes in CI/CD. | Developer accidentally hardcodes a value in code before using opaque. |
-| **Replay attack** | Every request requires a unique nonce + `expires` timestamp. Nonces are cached for 10 minutes. Requests outside a ±5-minute window are rejected. | Clock skew > 5 minutes between client and vault. |
-| **Private key stolen** | `opaque rotate` — old key invalid after 10-minute overlap window. | Window between key theft and detection. Review audit log regularly. |
-| **Man-in-the-middle (MITM)** | TLS required in production. The vault must be behind HTTPS. | Incorrect TLS configuration (self-signed certs accepted by clients). |
-| **Secrets at rest** | AES-256-GCM encryption. Master key in env var, never in the database. | Compromise of the host running the vault. |
-| **Unauthorized admin access** | Separate `OPAQUE_ADMIN_TOKEN` for management operations. Not used by applications. | Weak or leaked admin token. |
-| **Brute force / credential stuffing** | Rate limiting: 100 requests/minute per IP on all `/v1/*` routes. | Distributed attack from many IPs. |
-| **Database compromise** | Secret values are AES-256-GCM encrypted. An attacker with database access sees only ciphertext. | Master key compromise combined with database access. |
+| Threat                                        | Mitigation                                                                                                                                       | Residual risk                                                                                     |
+| --------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------- |
+| **Secret values leaked to LLM/agent context** | SDK injects secrets server-side at boot, after context is established. Dashboard is write-only — values never displayed.                         | Agent with shell access and `OPAQUE_PRIVATE_KEY` can still call `opaque pull`. All access logged. |
+| **Secrets in git history**                    | Values never written to files — only the Ed25519 private key goes in CI/CD.                                                                      | Developer accidentally hardcodes a value in code before using opaque.                             |
+| **Replay attack**                             | Every request requires a unique nonce + `expires` timestamp. Nonces are cached for 10 minutes. Requests outside a ±5-minute window are rejected. | Clock skew > 5 minutes between client and vault.                                                  |
+| **Private key stolen**                        | `opaque rotate` — old key invalid after 10-minute overlap window.                                                                                | Window between key theft and detection. Review audit log regularly.                               |
+| **Man-in-the-middle (MITM)**                  | TLS required in production. The vault must be behind HTTPS.                                                                                      | Incorrect TLS configuration (self-signed certs accepted by clients).                              |
+| **Secrets at rest**                           | AES-256-GCM encryption. Master key in env var, never in the database.                                                                            | Compromise of the host running the vault.                                                         |
+| **Unauthorized admin access**                 | Separate `OPAQUE_ADMIN_TOKEN` for management operations. Not used by applications.                                                               | Weak or leaked admin token.                                                                       |
+| **Brute force / credential stuffing**         | Rate limiting: 100 requests/minute per IP on all `/v1/*` routes.                                                                                 | Distributed attack from many IPs.                                                                 |
+| **Database compromise**                       | Secret values are AES-256-GCM encrypted. An attacker with database access sees only ciphertext.                                                  | Master key compromise combined with database access.                                              |
 
 ## Authentication flow
 
@@ -22,7 +22,7 @@ Every application request to `/v1/secrets` goes through this flow:
 1. Project boot
    └─ Read OPAQUE_PRIVATE_KEY from process.env
 
-2. signRequest() — in @opaque/core/crypto.ts
+2. signRequest() — in @florianjs/opaque/crypto.ts
    ├─ Parse Ed25519 private key from JWK JSON
    ├─ Derive public key from private key bytes
    ├─ Generate 128-bit random nonce
@@ -81,14 +81,14 @@ Every application request to `/v1/secrets` goes through this flow:
 ```ts
 // Conceptual — from apps/server/src/crypto/aes.ts
 async function encrypt(value: string): Promise<string> {
-  const key = await importMasterKey()
-  const iv = crypto.getRandomValues(new Uint8Array(12))
+  const key = await importMasterKey();
+  const iv = crypto.getRandomValues(new Uint8Array(12));
   const ciphertext = await crypto.subtle.encrypt(
-    { name: 'AES-GCM', iv },
+    { name: "AES-GCM", iv },
     key,
-    new TextEncoder().encode(value)
-  )
-  return encode([...iv, ...new Uint8Array(ciphertext)])
+    new TextEncoder().encode(value),
+  );
+  return encode([...iv, ...new Uint8Array(ciphertext)]);
 }
 ```
 

@@ -1,5 +1,5 @@
 {
-  "name": "@opaque/docs",
+  "name": "@florianjs/docs",
   "private": true,
   "type": "module",
   "scripts": {

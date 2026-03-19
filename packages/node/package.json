@@ -1,16 +1,20 @@
 {
-  "name": "@opaque/node",
-  "version": "0.1.0",
+  "name": "@florianjs/opaque-node",
+  "version": "0.1.1",
+  "files": [
+    "dist"
+  ],
   "type": "module",
   "exports": {
     ".": {
-      "import": "./src/index.ts"
+      "import": "./dist/index.mjs",
+      "types": "./dist/index.d.mts"
     }
   },
   "scripts": {
     "pack": "vp pack"
   },
   "dependencies": {
-    "@opaque/core": "workspace:*"
+    "@florianjs/opaque": "workspace:*"
   }
 }

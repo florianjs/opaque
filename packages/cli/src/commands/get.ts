@@ -1,5 +1,5 @@
 import { defineCommand } from "citty";
-import { fetchSecrets } from "@opaque/core";
+import { fetchSecrets } from "@florianjs/opaque";
 
 export const getCommand = defineCommand({
   meta: {

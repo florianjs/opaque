@@ -1,4 +1,4 @@
-import { fetchSecrets, injectEnv } from "@opaque/core";
+import { fetchSecrets, injectEnv } from "@florianjs/opaque";
 
 // Used as instrumentation.ts in a Next.js project
 export async function register(): Promise<void> {

@@ -18,6 +18,19 @@ LLM / agent context sees variable names only. Values never transit to the model.
 
 ---
 
+```bash
+# Install the CLI
+npm install -g @florianjs/opaque-cli
+
+# Install the SDK in your app
+npm install @florianjs/opaque          # core (any runtime)
+npm install @florianjs/opaque-node     # Node.js
+npm install @florianjs/opaque-next     # Next.js
+npm install @florianjs/opaque-nuxt     # Nuxt
+```
+
+---
+
 ## Table of contents
 
 1. [Prerequisites](#prerequisites)
@@ -91,7 +104,7 @@ cd ../..
 The dashboard is a static Vue 3 SPA served by the vault at `/ui`. Build it once before starting:
 
 ```bash
-pnpm --filter @opaque/ui build
+pnpm --filter @florianjs/ui build
 ```
 
 ### 5. Start the vault
@@ -124,7 +137,7 @@ On first visit, enter your `OPAQUE_ADMIN_TOKEN` — it is stored in `localStorag
 ### Rebuild after UI changes
 
 ```bash
-pnpm --filter @opaque/ui build
+pnpm --filter @florianjs/ui build
 # then restart the vault
 ```
 
@@ -144,7 +157,7 @@ Each application that needs secrets must be registered on the vault. Registratio
 
 ```bash
 # Install the CLI
-npm install -g @opaque/cli
+npm install -g @florianjs/opaque-cli
 
 # Point it at your vault
 export OPAQUE_VAULT_URL="http://localhost:4200"
@@ -226,29 +239,29 @@ At boot, the SDK signs a request with the private key, fetches the secrets from 
 ### Node.js
 
 ```bash
-npm install @opaque/node
+npm install @florianjs/opaque-node
 ```
 
 ```ts
 // server.ts — must be the very first import
-import { bootstrap } from '@opaque/node';
+import { bootstrap } from "@florianjs/opaque-node";
 await bootstrap();
 
 // Secrets are now in process.env
-import { startServer } from './app';
+import { startServer } from "./app";
 startServer();
 ```
 
 ### Next.js
 
 ```bash
-npm install @opaque/next
+npm install @florianjs/opaque-next
 ```
 
 Create `instrumentation.ts` at the project root:
 
 ```ts
-import { register } from '@opaque/next';
+import { register } from "@florianjs/opaque-next";
 export { register };
 ```
 
@@ -264,13 +277,13 @@ export default nextConfig;
 ### Nuxt
 
 ```bash
-npm install @opaque/nuxt
+npm install @florianjs/opaque-nuxt
 ```
 
 ```ts
 // nuxt.config.ts
 export default defineNuxtConfig({
-  modules: ['@opaque/nuxt'],
+  modules: ["@florianjs/opaque-nuxt"],
   opaque: {
     vaultUrl: process.env.OPAQUE_VAULT_URL,
     privateKey: process.env.OPAQUE_PRIVATE_KEY,
@@ -282,17 +295,17 @@ export default defineNuxtConfig({
 ### Core SDK (any runtime)
 
 ```bash
-npm install @opaque/core
+npm install @florianjs/opaque
 ```
 
 ```ts
-import { fetchSecrets, injectEnv } from '@opaque/core';
+import { fetchSecrets, injectEnv } from "@florianjs/opaque";
 
 const secrets = await fetchSecrets({
   vaultUrl: process.env.OPAQUE_VAULT_URL!,
   privateKey: process.env.OPAQUE_PRIVATE_KEY!,
   project: process.env.OPAQUE_PROJECT!,
-  env: 'production', // optional, defaults to process.env.NODE_ENV
+  env: "production", // optional, defaults to process.env.NODE_ENV
 });
 
 injectEnv(secrets, process.env as Record<string, string>);
@@ -339,7 +352,7 @@ DATABASE_URL="$DATABASE_URL" pnpm exec drizzle-kit migrate
 ### Build for production
 
 ```bash
-pnpm --filter @opaque/ui build    # build dashboard → apps/ui/dist/
+pnpm --filter @florianjs/ui build    # build dashboard → apps/ui/dist/
 vp run server:build               # compile vault → apps/server/dist/
 vp run server:start               # run compiled vault
 ```
@@ -467,7 +480,7 @@ vp dev              # start dashboard dev server (Vite HMR)
 vp check            # format + lint + typecheck (Oxfmt + Oxlint)
 vp check --fix      # auto-fix formatting and lint issues
 vp test             # run all tests (Vitest)
-vp pack             # build SDK packages for npm (Rolldown + tsdown)
+vp run pack         # build SDK packages for npm (Rolldown + tsdown)
 vp build            # production build (all packages + apps)
 vp run db:migrate   # run Drizzle migrations
 vp run db:studio    # open Drizzle Studio (DB browser)
@@ -486,11 +499,11 @@ vp test packages/core/src/crypto.test.ts
 ```
 opaque/
 ├── packages/
-│   ├── core/     @opaque/core   — zero-dep TypeScript SDK (fetch, inject, watch, rotate, crypto)
-│   ├── nuxt/     @opaque/nuxt   — Nuxt module (hooks into nitro:init)
-│   ├── next/     @opaque/next   — Next.js instrumentation.ts adapter
-│   ├── node/     @opaque/node   — bare Node bootstrap()
-│   └── cli/      @opaque/cli    — management CLI (citty)
+│   ├── core/     @florianjs/opaque   — zero-dep TypeScript SDK (fetch, inject, watch, rotate, crypto)
+│   ├── nuxt/     @florianjs/opaque-nuxt   — Nuxt module (hooks into nitro:init)
+│   ├── next/     @florianjs/opaque-next   — Next.js instrumentation.ts adapter
+│   ├── node/     @florianjs/opaque-node   — bare Node bootstrap()
+│   └── cli/      @florianjs/opaque-cli    — management CLI (citty)
 └── apps/
     ├── server/   Hono + Bun vault — routes, middleware, db, crypto (port 4200)
     └── ui/       Vue 3 dashboard — served as static at /ui

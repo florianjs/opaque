@@ -1,5 +1,5 @@
 import { defineCommand } from "citty";
-import { signRequest } from "@opaque/core";
+import { signRequest } from "@florianjs/opaque";
 
 export const setCommand = defineCommand({
   meta: {

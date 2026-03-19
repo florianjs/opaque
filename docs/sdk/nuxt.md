@@ -1,6 +1,6 @@
 # Nuxt SDK
 
-`@opaque/nuxt` is a Nuxt module that hooks into Nitro's initialization lifecycle to fetch and inject secrets before any server routes handle requests.
+`@florianjs/opaque-nuxt` is a Nuxt module that hooks into Nitro's initialization lifecycle to fetch and inject secrets before any server routes handle requests.
 
 ## Requirements
 
@@ -10,7 +10,7 @@
 ## Installation
 
 ```bash
-npm install @opaque/nuxt
+npm install @florianjs/opaque-nuxt
 ```
 
 ## Configuration
@@ -20,13 +20,13 @@ npm install @opaque/nuxt
 ```ts
 // nuxt.config.ts
 export default defineNuxtConfig({
-  modules: ['@opaque/nuxt'],
+  modules: ["@florianjs/opaque-nuxt"],
   opaque: {
     vaultUrl: process.env.OPAQUE_VAULT_URL,
     privateKey: process.env.OPAQUE_PRIVATE_KEY,
     project: process.env.OPAQUE_PROJECT,
   },
-})
+});
 ```
 
 ### 2. Set environment variables
@@ -47,13 +47,13 @@ For production, set these in your deployment environment.
 The module hooks into `nitro:init`, which runs once when the Nitro server starts:
 
 ```ts
-nuxt.hook('nitro:init', async () => {
+nuxt.hook("nitro:init", async () => {
   const secrets = await fetchSecrets({
     ...options,
     env: process.env.NODE_ENV,
-  })
-  injectEnv(secrets, process.env as Record<string, string>)
-})
+  });
+  injectEnv(secrets, process.env as Record<string, string>);
+});
 ```
 
 After this hook, all vault secrets are available in `process.env` for all Nitro server routes and API handlers.
@@ -63,44 +63,44 @@ After this hook, all vault secrets are available in `process.env` for all Nitro 
 ```ts
 // server/api/data.get.ts
 export default defineEventHandler(async (event) => {
-  // process.env.DATABASE_URL was injected by @opaque/nuxt at startup
-  const db = await connect(process.env.DATABASE_URL!)
+  // process.env.DATABASE_URL was injected by @florianjs/opaque-nuxt at startup
+  const db = await connect(process.env.DATABASE_URL!);
 
-  return db.query('SELECT now()')
-})
+  return db.query("SELECT now()");
+});
 ```
 
 ```ts
 // server/utils/stripe.ts
-import Stripe from 'stripe'
+import Stripe from "stripe";
 
 export const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
-  apiVersion: '2024-11-20',
-})
+  apiVersion: "2024-11-20",
+});
 ```
 
 ## Module options
 
 All options are optional — the module falls back to environment variables if not set in `nuxt.config.ts`:
 
-| Option | Type | Default | Description |
-|---|---|---|---|
-| `vaultUrl` | `string` | `process.env.OPAQUE_VAULT_URL` | Vault base URL |
-| `privateKey` | `string` | `process.env.OPAQUE_PRIVATE_KEY` | Ed25519 private key JWK |
-| `project` | `string` | `process.env.OPAQUE_PROJECT` | Project name |
-| `env` | `string` | `process.env.NODE_ENV` | Secrets environment to fetch |
+| Option       | Type     | Default                          | Description                  |
+| ------------ | -------- | -------------------------------- | ---------------------------- |
+| `vaultUrl`   | `string` | `process.env.OPAQUE_VAULT_URL`   | Vault base URL               |
+| `privateKey` | `string` | `process.env.OPAQUE_PRIVATE_KEY` | Ed25519 private key JWK      |
+| `project`    | `string` | `process.env.OPAQUE_PROJECT`     | Project name                 |
+| `env`        | `string` | `process.env.NODE_ENV`           | Secrets environment to fetch |
 
 ```ts
 // nuxt.config.ts — explicit configuration
 export default defineNuxtConfig({
-  modules: ['@opaque/nuxt'],
+  modules: ["@florianjs/opaque-nuxt"],
   opaque: {
-    vaultUrl: 'https://vault.example.com',
+    vaultUrl: "https://vault.example.com",
     privateKey: process.env.OPAQUE_PRIVATE_KEY,
-    project: 'my-app',
-    env: 'production', // override NODE_ENV
+    project: "my-app",
+    env: "production", // override NODE_ENV
   },
-})
+});
 ```
 
 ## Client-side note
@@ -124,11 +124,13 @@ On serverless platforms, `nitro:init` runs on every cold start. The vault fetch 
 ## Troubleshooting
 
 **Secrets not injected:**
+
 - Verify the module is listed in `modules` in `nuxt.config.ts`
 - Check the server console for `opaque:` prefixed errors at startup
 - Verify the three environment variables are set
 
 **`opaque: failed to fetch secrets` at startup:**
+
 - Check that `OPAQUE_VAULT_URL` is reachable from the deployment environment
 - Verify `OPAQUE_PROJECT` matches a registered project on the vault
 - Verify `OPAQUE_PRIVATE_KEY` has not been rotated (use `opaque audit` to check)

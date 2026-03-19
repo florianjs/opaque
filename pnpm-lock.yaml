@@ -54,9 +54,12 @@ importers:
 
   packages/cli:
     dependencies:
-      '@opaque/core':
+      '@florianjs/opaque':
         specifier: workspace:*
         version: link:../core
+      '@noble/ed25519':
+        specifier: ^2.2.3
+        version: 2.3.0
       citty:
         specifier: ^0.1.6
         version: 0.1.6
@@ -69,7 +72,7 @@ importers:
 
   packages/next:
     dependencies:
-      '@opaque/core':
+      '@florianjs/opaque':
         specifier: workspace:*
         version: link:../core
       next:
@@ -78,18 +81,18 @@ importers:
 
   packages/node:
     dependencies:
-      '@opaque/core':
+      '@florianjs/opaque':
         specifier: workspace:*
         version: link:../core
 
   packages/nuxt:
     dependencies:
+      '@florianjs/opaque':
+        specifier: workspace:*
+        version: link:../core
       '@nuxt/kit':
         specifier: ^3.0.0
         version: 3.21.2
-      '@opaque/core':
-        specifier: workspace:*
-        version: link:../core
 
 packages:
 

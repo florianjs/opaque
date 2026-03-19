@@ -1,4 +1,4 @@
-import { fetchSecrets, injectEnv } from "@opaque/core";
+import { fetchSecrets, injectEnv } from "@florianjs/opaque";
 
 export async function bootstrap(): Promise<void> {
   const secrets = await fetchSecrets({

@@ -1,20 +1,25 @@
 {
-  "name": "@opaque/cli",
-  "version": "0.1.0",
+  "name": "@florianjs/opaque-cli",
+  "version": "0.1.1",
   "bin": {
-    "opaque": "./src/index.ts"
+    "opaque": "./dist/index.mjs"
   },
+  "files": [
+    "dist"
+  ],
   "type": "module",
   "exports": {
     ".": {
-      "import": "./src/index.ts"
+      "import": "./dist/index.mjs",
+      "types": "./dist/index.d.mts"
     }
   },
   "scripts": {
     "pack": "vp pack"
   },
   "dependencies": {
-    "@opaque/core": "workspace:*",
+    "@florianjs/opaque": "workspace:*",
+    "@noble/ed25519": "^2.2.3",
     "citty": "^0.1.6"
   }
 }

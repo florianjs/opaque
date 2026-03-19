@@ -35,7 +35,7 @@ features:
 
 ```bash
 # Install the CLI
-npm install -g @opaque/cli
+npm install -g @florianjs/opaque-cli
 
 # Point it at your vault
 export OPAQUE_VAULT_URL="https://vault.example.com"

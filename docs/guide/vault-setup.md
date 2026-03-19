@@ -6,12 +6,12 @@ This page covers full vault configuration for development and production environ
 
 Create `apps/server/.env` (development) or configure these in your deployment environment (production):
 
-| Variable | Required | Default | Description |
-|---|---|---|---|
-| `OPAQUE_MASTER_KEY` | **yes** | — | 32-byte hex key for AES-256-GCM encryption of secrets at rest |
-| `OPAQUE_ADMIN_TOKEN` | **yes** | — | Bearer token for dashboard and CLI management operations |
-| `OPAQUE_PORT` | no | `4200` | Port to listen on |
-| `DATABASE_URL` | no | `file:./opaque.db` | LibSQL/SQLite connection string |
+| Variable             | Required | Default            | Description                                                   |
+| -------------------- | -------- | ------------------ | ------------------------------------------------------------- |
+| `OPAQUE_MASTER_KEY`  | **yes**  | —                  | 32-byte hex key for AES-256-GCM encryption of secrets at rest |
+| `OPAQUE_ADMIN_TOKEN` | **yes**  | —                  | Bearer token for dashboard and CLI management operations      |
+| `OPAQUE_PORT`        | no       | `4200`             | Port to listen on                                             |
+| `DATABASE_URL`       | no       | `file:./opaque.db` | LibSQL/SQLite connection string                               |
 
 Generate secure values:
 
@@ -67,9 +67,11 @@ DATABASE_URL="$DATABASE_URL" bun x drizzle-kit migrate
 
 ::: tip Drizzle Studio
 To browse the database in a web UI during development:
+
 ```bash
 vp run db:studio
 ```
+
 :::
 
 ## Database schema

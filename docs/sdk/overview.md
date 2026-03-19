@@ -4,14 +4,14 @@ opaque provides a layered SDK: a zero-dependency core package, and thin adapters
 
 ## Packages
 
-| Package | Use case |
-|---|---|
-| `@opaque/node` | Bare Node.js and Bun apps — `await bootstrap()` at the top of your entry point |
-| `@opaque/next` | Next.js — hooks into `instrumentation.ts` |
-| `@opaque/nuxt` | Nuxt — module that hooks into `nitro:init` |
-| `@opaque/core` | Any runtime — direct access to `fetchSecrets`, `injectEnv`, `watchSecrets` |
+| Package                  | Use case                                                                       |
+| ------------------------ | ------------------------------------------------------------------------------ |
+| `@florianjs/opaque-node` | Bare Node.js and Bun apps — `await bootstrap()` at the top of your entry point |
+| `@florianjs/opaque-next` | Next.js — hooks into `instrumentation.ts`                                      |
+| `@florianjs/opaque-nuxt` | Nuxt — module that hooks into `nitro:init`                                     |
+| `@florianjs/opaque`      | Any runtime — direct access to `fetchSecrets`, `injectEnv`, `watchSecrets`     |
 
-All adapters wrap `@opaque/core`. If your framework is not listed, use `@opaque/core` directly.
+All adapters wrap `@florianjs/opaque`. If your framework is not listed, use `@florianjs/opaque` directly.
 
 ## Three environment variables
 
@@ -25,11 +25,11 @@ OPAQUE_PROJECT="my-app"
 
 These are the **only** deployment-environment credentials your application needs. All other secrets live in the vault.
 
-| Variable | Description |
-|---|---|
+| Variable             | Description                                                     |
+| -------------------- | --------------------------------------------------------------- |
 | `OPAQUE_PRIVATE_KEY` | Ed25519 private key in JWK format, printed by `opaque register` |
-| `OPAQUE_VAULT_URL` | Base URL of your opaque vault, including scheme and port |
-| `OPAQUE_PROJECT` | Project name as registered on the vault |
+| `OPAQUE_VAULT_URL`   | Base URL of your opaque vault, including scheme and port        |
+| `OPAQUE_PROJECT`     | Project name as registered on the vault                         |
 
 ## What happens at boot
 
@@ -60,10 +60,10 @@ opaque set --project my-app --env pr-456 DATABASE_URL="postgres://staging/pr456"
 
 ## Watching for updates
 
-For long-running processes that need to pick up secret changes without restarting, use `watchSecrets` from `@opaque/core`:
+For long-running processes that need to pick up secret changes without restarting, use `watchSecrets` from `@florianjs/opaque`:
 
 ```ts
-import { watchSecrets } from '@opaque/core'
+import { watchSecrets } from "@florianjs/opaque";
 
 const stop = watchSecrets({
   vaultUrl: process.env.OPAQUE_VAULT_URL!,
@@ -73,23 +73,24 @@ const stop = watchSecrets({
   onUpdate(secrets) {
     // Called immediately on start, then every `interval` ms
     // Re-inject or process updated values
-    Object.assign(process.env, secrets)
+    Object.assign(process.env, secrets);
   },
   onError(err) {
-    console.error('opaque: failed to refresh secrets', err.message)
+    console.error("opaque: failed to refresh secrets", err.message);
   },
-})
+});
 
 // Later, to stop watching:
-stop()
+stop();
 ```
 
 ::: tip When to use watchSecrets
 Most applications only need to fetch secrets once at boot. Use `watchSecrets` when:
+
 - Your process runs for hours or days and secrets may be rotated
 - You have a worker that needs to pick up updated API keys without a restart
 - You are building a proxy or gateway that needs fresh credentials
-:::
+  :::
 
 ## Behavior when vault is unreachable
 
@@ -102,12 +103,12 @@ Error: opaque: failed to fetch secrets (503) — Service Unavailable
 If you want graceful degradation, catch the error from `bootstrap()`:
 
 ```ts
-import { bootstrap } from '@opaque/node'
+import { bootstrap } from "@florianjs/opaque-node";
 
 try {
-  await bootstrap()
+  await bootstrap();
 } catch (err) {
-  console.error('Failed to load secrets from vault:', err.message)
+  console.error("Failed to load secrets from vault:", err.message);
   // Fall back to process.env values already set in the environment
   // Only do this if you have a genuine fallback strategy
 }

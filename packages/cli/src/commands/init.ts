@@ -33,12 +33,8 @@ export const initCommand = defineCommand({
       throw new Error("opaque: project name is required");
     }
 
-    console.log("\nConfiguration:");
-    console.log(`  OPAQUE_VAULT_URL="${finalUrl}"`);
-    console.log(`  OPAQUE_ADMIN_TOKEN="${adminToken.trim()}"`);
-    console.log(`  OPAQUE_PROJECT="${projectName.trim()}"`);
     console.log(
-      "\nAdd these to your environment, then run: opaque register --project " + projectName.trim(),
+      `\nRun this to register your project:\n\n  opaque register --project ${projectName.trim()} --vault-url ${finalUrl} --token ${adminToken.trim()}\n`,
     );
   },
 });

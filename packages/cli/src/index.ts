@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 import { defineCommand, runMain } from "citty";
 import { initCommand } from "./commands/init";
+import { startCommand } from "./commands/start";
 import { registerCommand } from "./commands/register";
 import { setCommand } from "./commands/set";
 import { getCommand } from "./commands/get";
@@ -17,6 +18,7 @@ const main = defineCommand({
   },
   subCommands: {
     init: initCommand,
+    start: startCommand,
     register: registerCommand,
     set: setCommand,
     get: getCommand,

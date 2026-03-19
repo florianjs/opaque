@@ -1,5 +1,5 @@
 import { defineNuxtModule } from "@nuxt/kit";
-import { fetchSecrets, injectEnv } from "@opaque/core";
+import { fetchSecrets, injectEnv } from "@florianjs/opaque";
 
 export default defineNuxtModule({
   meta: { name: "opaque", configKey: "opaque" },

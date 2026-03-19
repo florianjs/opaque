@@ -1,6 +1,7 @@
 {
-  "name": "@opaque/server",
+  "name": "@florianjs/server",
   "version": "0.1.0",
+  "private": true,
   "type": "module",
   "scripts": {
     "dev": "bun run --hot src/index.ts",

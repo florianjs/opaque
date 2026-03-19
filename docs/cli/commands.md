@@ -1,11 +1,11 @@
 # CLI Commands
 
-The `@opaque/cli` package provides the `opaque` command for managing your vault from the terminal.
+The `@florianjs/opaque-cli` package provides the `opaque` command for managing your vault from the terminal.
 
 ## Installation
 
 ```bash
-npm install -g @opaque/cli
+npm install -g @florianjs/opaque-cli
 ```
 
 ## Environment variables
@@ -28,6 +28,7 @@ opaque init
 ```
 
 The wizard prompts for:
+
 - Vault URL
 - Admin token
 - Whether to register a first project
@@ -46,9 +47,9 @@ opaque register --project <name>
 
 **Flags:**
 
-| Flag | Required | Description |
-|---|---|---|
-| `--project` | yes | Project name (used as the identifier in all other commands) |
+| Flag        | Required | Description                                                 |
+| ----------- | -------- | ----------------------------------------------------------- |
+| `--project` | yes      | Project name (used as the identifier in all other commands) |
 
 **Output:**
 
@@ -82,10 +83,10 @@ opaque set --project <name> --env <env> KEY=value
 
 **Flags:**
 
-| Flag | Required | Description |
-|---|---|---|
-| `--project` | yes | Project name |
-| `--env` | yes | Environment name (any string: `production`, `development`, `pr-123`, etc.) |
+| Flag        | Required | Description                                                                |
+| ----------- | -------- | -------------------------------------------------------------------------- |
+| `--project` | yes      | Project name                                                               |
+| `--env`     | yes      | Environment name (any string: `production`, `development`, `pr-123`, etc.) |
 
 **Examples:**
 
@@ -104,9 +105,11 @@ opaque set --project my-app --env pr-456 DATABASE_URL="postgres://staging/myapp_
 
 ::: tip Quoting values
 Always quote values that contain special characters, spaces, or equals signs:
+
 ```bash
 opaque set --project my-app --env production JDBC_URL="jdbc:postgresql://host:5432/db?user=app&password=secret"
 ```
+
 :::
 
 ---
@@ -121,10 +124,10 @@ opaque get --project <name> --env <env> KEY
 
 **Flags:**
 
-| Flag | Required | Description |
-|---|---|---|
-| `--project` | yes | Project name |
-| `--env` | yes | Environment name |
+| Flag        | Required | Description      |
+| ----------- | -------- | ---------------- |
+| `--project` | yes      | Project name     |
+| `--env`     | yes      | Environment name |
 
 **Examples:**
 
@@ -149,10 +152,10 @@ opaque list --project <name> --env <env>
 
 **Flags:**
 
-| Flag | Required | Description |
-|---|---|---|
-| `--project` | yes | Project name |
-| `--env` | yes | Environment name |
+| Flag        | Required | Description      |
+| ----------- | -------- | ---------------- |
+| `--project` | yes      | Project name     |
+| `--env`     | yes      | Environment name |
 
 **Example:**
 
@@ -177,9 +180,9 @@ opaque rotate --project <name>
 
 **Flags:**
 
-| Flag | Required | Description |
-|---|---|---|
-| `--project` | yes | Project name |
+| Flag        | Required | Description  |
+| ----------- | -------- | ------------ |
+| `--project` | yes      | Project name |
 
 **Example:**
 
@@ -206,10 +209,10 @@ opaque pull --project <name> --env <env>
 
 **Flags:**
 
-| Flag | Required | Description |
-|---|---|---|
-| `--project` | yes | Project name |
-| `--env` | yes | Environment name |
+| Flag        | Required | Description      |
+| ----------- | -------- | ---------------- |
+| `--project` | yes      | Project name     |
+| `--env`     | yes      | Environment name |
 
 **Examples:**
 
@@ -243,10 +246,10 @@ opaque audit --project <name>
 
 **Flags:**
 
-| Flag | Required | Description |
-|---|---|---|
-| `--project` | yes | Project name |
-| `--limit` | no | Number of entries to show (default: 50) |
+| Flag        | Required | Description                             |
+| ----------- | -------- | --------------------------------------- |
+| `--project` | yes      | Project name                            |
+| `--limit`   | no       | Number of entries to show (default: 50) |
 
 **Example:**
 

@@ -1,6 +1,7 @@
 {
-  "name": "@opaque/ui",
+  "name": "@florianjs/ui",
   "version": "0.1.0",
+  "private": true,
   "type": "module",
   "scripts": {
     "dev": "vite",

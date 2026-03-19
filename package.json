@@ -11,12 +11,12 @@
     "check": "vp check",
     "check:fix": "vp check --fix",
     "test": "vp test",
-    "pack": "vp pack",
+    "pack": "pnpm --filter './packages/*' -r exec vp pack",
     "server:dev": "bun run --hot apps/server/src/index.ts",
     "server:build": "bun build apps/server/src/index.ts --outdir apps/server/dist --target bun",
     "server:start": "bun run apps/server/dist/index.js",
-    "db:migrate": "vp run --filter @opaque/server db:migrate",
-    "db:studio": "vp run --filter @opaque/server db:studio"
+    "db:migrate": "vp run --filter @florianjs/server db:migrate",
+    "db:studio": "vp run --filter @florianjs/server db:studio"
   },
   "packageManager": "pnpm@10.32.1"
 }

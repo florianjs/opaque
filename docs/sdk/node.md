@@ -1,15 +1,15 @@
 # Node.js SDK
 
-`@opaque/node` is the simplest adapter: a single `bootstrap()` function that fetches secrets and injects them into `process.env` before your app starts.
+`@florianjs/opaque-node` is the simplest adapter: a single `bootstrap()` function that fetches secrets and injects them into `process.env` before your app starts.
 
 Works with Node.js >= 18 and Bun >= 1.1.
 
 ## Installation
 
 ```bash
-npm install @opaque/node
+npm install @florianjs/opaque-node
 # or
-bun add @opaque/node
+bun add @florianjs/opaque-node
 ```
 
 ## Setup
@@ -28,13 +28,13 @@ Call `bootstrap()` as the very first thing in your entry point, before any other
 
 ```ts
 // server.ts
-import { bootstrap } from '@opaque/node'
-await bootstrap()
+import { bootstrap } from "@florianjs/opaque-node";
+await bootstrap();
 
 // All secrets are now in process.env — safe to import the rest of your app
-import { createServer } from './app'
-const server = createServer()
-server.listen(3000)
+import { createServer } from "./app";
+const server = createServer();
+server.listen(3000);
 ```
 
 ::: warning Bootstrap must be first
@@ -42,53 +42,54 @@ server.listen(3000)
 
 ```ts
 // CommonJS entry point
-const { bootstrap } = require('@opaque/node')
+const { bootstrap } = require("@florianjs/opaque-node");
 
 async function main() {
-  await bootstrap()
-  const { app } = require('./app') // require after bootstrap
-  app.listen(3000)
+  await bootstrap();
+  const { app } = require("./app"); // require after bootstrap
+  app.listen(3000);
 }
 
-main().catch(console.error)
+main().catch(console.error);
 ```
+
 :::
 
 ## Express example
 
 ```ts
 // index.ts
-import { bootstrap } from '@opaque/node'
-await bootstrap()
+import { bootstrap } from "@florianjs/opaque-node";
+await bootstrap();
 
 // Express reads process.env.PORT, process.env.DATABASE_URL, etc.
-import express from 'express'
-import { Pool } from 'pg'
+import express from "express";
+import { Pool } from "pg";
 
-const app = express()
-const db = new Pool({ connectionString: process.env.DATABASE_URL })
+const app = express();
+const db = new Pool({ connectionString: process.env.DATABASE_URL });
 
-app.get('/health', (_req, res) => res.json({ ok: true }))
+app.get("/health", (_req, res) => res.json({ ok: true }));
 
-app.listen(Number(process.env.PORT ?? 3000))
+app.listen(Number(process.env.PORT ?? 3000));
 ```
 
 ## Fastify example
 
 ```ts
 // server.ts
-import { bootstrap } from '@opaque/node'
-await bootstrap()
+import { bootstrap } from "@florianjs/opaque-node";
+await bootstrap();
 
-import Fastify from 'fastify'
+import Fastify from "fastify";
 
-const server = Fastify({ logger: true })
+const server = Fastify({ logger: true });
 
-server.get('/', async () => {
-  return { message: 'hello' }
-})
+server.get("/", async () => {
+  return { message: "hello" };
+});
 
-await server.listen({ port: Number(process.env.PORT ?? 3000) })
+await server.listen({ port: Number(process.env.PORT ?? 3000) });
 ```
 
 ## Explicit configuration
@@ -96,16 +97,16 @@ await server.listen({ port: Number(process.env.PORT ?? 3000) })
 If you prefer not to rely on environment variables, pass config directly:
 
 ```ts
-import { fetchSecrets, injectEnv } from '@opaque/core'
+import { fetchSecrets, injectEnv } from "@florianjs/opaque";
 
 const secrets = await fetchSecrets({
-  vaultUrl: 'https://vault.example.com',
+  vaultUrl: "https://vault.example.com",
   privateKey: process.env.OPAQUE_PRIVATE_KEY!,
-  project: 'my-app',
-  env: 'production', // override NODE_ENV
-})
+  project: "my-app",
+  env: "production", // override NODE_ENV
+});
 
-injectEnv(secrets, process.env as Record<string, string>)
+injectEnv(secrets, process.env as Record<string, string>);
 ```
 
 ## Force override existing values
@@ -113,20 +114,22 @@ injectEnv(secrets, process.env as Record<string, string>)
 By default, `injectEnv` does not overwrite values already set in `process.env`. This means existing environment variables take precedence over vault values. To force vault values:
 
 ```ts
-import { fetchSecrets, injectEnv } from '@opaque/core'
+import { fetchSecrets, injectEnv } from "@florianjs/opaque";
 
-const secrets = await fetchSecrets({ /* ... */ })
-injectEnv(secrets, process.env as Record<string, string>, { force: true })
+const secrets = await fetchSecrets({
+  /* ... */
+});
+injectEnv(secrets, process.env as Record<string, string>, { force: true });
 ```
 
 ## Bun
 
-`@opaque/node` works identically in Bun. No additional configuration is needed:
+`@florianjs/opaque-node` works identically in Bun. No additional configuration is needed:
 
 ```ts
 // index.ts (Bun)
-import { bootstrap } from '@opaque/node'
-await bootstrap()
+import { bootstrap } from "@florianjs/opaque-node";
+await bootstrap();
 
 // your app
 ```

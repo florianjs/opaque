@@ -26,14 +26,14 @@ The vault is the only place where secret values exist in plaintext (transiently,
 
 ## What opaque protects
 
-| Protected against | How |
-|---|---|
-| Secrets in code / git history | Values are never written to files — only the private key goes in CI/CD |
-| Secrets in LLM context | The SDK injects secrets into `process.env` at boot, after the agent's context is established |
-| Secrets in deployment configs | Three non-secret vars replace all `.env` content in your deployment config |
-| Passive exposure through logs | Dashboard is write-only; values are never logged, never displayed |
-| Replay attacks | Every request carries a nonce and a 5-minute expiry window |
-| Brute force | 100 req/min per IP rate limiting |
+| Protected against             | How                                                                                          |
+| ----------------------------- | -------------------------------------------------------------------------------------------- |
+| Secrets in code / git history | Values are never written to files — only the private key goes in CI/CD                       |
+| Secrets in LLM context        | The SDK injects secrets into `process.env` at boot, after the agent's context is established |
+| Secrets in deployment configs | Three non-secret vars replace all `.env` content in your deployment config                   |
+| Passive exposure through logs | Dashboard is write-only; values are never logged, never displayed                            |
+| Replay attacks                | Every request carries a nonce and a 5-minute expiry window                                   |
+| Brute force                   | 100 req/min per IP rate limiting                                                             |
 
 ## What opaque does not prevent
 
@@ -55,11 +55,11 @@ If you give an AI agent shell access and `OPAQUE_PRIVATE_KEY`, treat that as gra
 ```
 opaque/
 ├── packages/
-│   ├── core/     @opaque/core   — zero-dep TypeScript SDK
-│   ├── nuxt/     @opaque/nuxt   — Nuxt module (nitro:init hook)
-│   ├── next/     @opaque/next   — Next.js instrumentation.ts adapter
-│   ├── node/     @opaque/node   — bare Node bootstrap()
-│   └── cli/      @opaque/cli    — management CLI (citty)
+│   ├── core/     @florianjs/opaque   — zero-dep TypeScript SDK
+│   ├── nuxt/     @florianjs/opaque-nuxt   — Nuxt module (nitro:init hook)
+│   ├── next/     @florianjs/opaque-next   — Next.js instrumentation.ts adapter
+│   ├── node/     @florianjs/opaque-node   — bare Node bootstrap()
+│   └── cli/      @florianjs/opaque-cli    — management CLI (citty)
 └── apps/
     ├── server/   Hono + Bun vault — routes, middleware, db, crypto (port 4200)
     └── ui/       Vue 3 dashboard — served as static at /ui

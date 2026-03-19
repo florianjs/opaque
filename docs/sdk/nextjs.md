@@ -1,6 +1,6 @@
 # Next.js SDK
 
-`@opaque/next` integrates with Next.js via the [instrumentation hook](https://nextjs.org/docs/app/building-your-application/optimizing/instrumentation) — a built-in Next.js feature that runs once when the server starts, before any requests are handled.
+`@florianjs/opaque-next` integrates with Next.js via the [instrumentation hook](https://nextjs.org/docs/app/building-your-application/optimizing/instrumentation) — a built-in Next.js feature that runs once when the server starts, before any requests are handled.
 
 ## Requirements
 
@@ -10,7 +10,7 @@
 ## Installation
 
 ```bash
-npm install @opaque/next
+npm install @florianjs/opaque-next
 ```
 
 ## Configuration
@@ -19,15 +19,15 @@ npm install @opaque/next
 
 ```ts
 // next.config.ts
-import type { NextConfig } from 'next'
+import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   experimental: {
     instrumentationHook: true,
   },
-}
+};
 
-export default nextConfig
+export default nextConfig;
 ```
 
 ::: tip Next.js 15+
@@ -40,11 +40,11 @@ Create `instrumentation.ts` at the **project root** (same level as `app/` or `pa
 
 ```ts
 // instrumentation.ts
-import { register } from '@opaque/next'
-export { register }
+import { register } from "@florianjs/opaque-next";
+export { register };
 ```
 
-That is all. `@opaque/next` exports a `register` function that Next.js calls automatically when the server starts.
+That is all. `@florianjs/opaque-next` exports a `register` function that Next.js calls automatically when the server starts.
 
 ### 3. Set environment variables
 
@@ -67,17 +67,17 @@ OPAQUE_PROJECT="my-app"
 
 ## How it works
 
-The `register` function exported by `@opaque/next`:
+The `register` function exported by `@florianjs/opaque-next`:
 
 ```ts
 export async function register() {
-  if (process.env.NEXT_RUNTIME === 'nodejs') {
+  if (process.env.NEXT_RUNTIME === "nodejs") {
     const secrets = await fetchSecrets({
-      vaultUrl: process.env.OPAQUE_VAULT_URL ?? '',
-      privateKey: process.env.OPAQUE_PRIVATE_KEY ?? '',
-      project: process.env.OPAQUE_PROJECT ?? '',
-    })
-    injectEnv(secrets, process.env as Record<string, string>)
+      vaultUrl: process.env.OPAQUE_VAULT_URL ?? "",
+      privateKey: process.env.OPAQUE_PRIVATE_KEY ?? "",
+      project: process.env.OPAQUE_PROJECT ?? "",
+    });
+    injectEnv(secrets, process.env as Record<string, string>);
   }
 }
 ```
@@ -90,26 +90,26 @@ After `register()` runs, all vault secrets are in `process.env`:
 
 ```ts
 // app/api/data/route.ts
-import { Pool } from 'pg'
+import { Pool } from "pg";
 
-// process.env.DATABASE_URL was injected by @opaque/next at startup
+// process.env.DATABASE_URL was injected by @florianjs/opaque-next at startup
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
-})
+});
 
 export async function GET() {
-  const result = await pool.query('SELECT now()')
-  return Response.json(result.rows[0])
+  const result = await pool.query("SELECT now()");
+  return Response.json(result.rows[0]);
 }
 ```
 
 ```ts
 // lib/stripe.ts
-import Stripe from 'stripe'
+import Stripe from "stripe";
 
 export const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
-  apiVersion: '2024-11-20',
-})
+  apiVersion: "2024-11-20",
+});
 ```
 
 ## Vercel deployment
@@ -128,17 +128,20 @@ Use Vercel's environment scoping (Production / Preview / Development) combined w
 
 - Production builds → `NODE_ENV=production` → opaque fetches `env=production` secrets
 - Preview deployments → `NODE_ENV=preview` → opaque fetches `env=preview` secrets
-:::
+  :::
 
 ## Troubleshooting
 
 **Secrets not available in route handlers:**
+
 - Verify `instrumentation.ts` is at the project root (not inside `app/` or `src/`)
 - Verify `instrumentationHook: true` is in `next.config.ts` (Next.js < 15)
 - Check the server startup logs for `opaque:` prefixed errors
 
 **Build-time errors:**
+
 - opaque runs at **runtime**, not build time. `process.env.DATABASE_URL` will be undefined during `next build` — this is expected. Don't access opaque-managed secrets in `getStaticProps` or module-level code that runs at build time.
 
 **Edge runtime:**
+
 - The `register` function skips when `NEXT_RUNTIME !== 'nodejs'`. Secrets are not available in Edge middleware or Edge API routes.

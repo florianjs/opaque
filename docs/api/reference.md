@@ -82,8 +82,8 @@ curl -X POST \
 
 ```ts
 {
-  name: string       // Project identifier — used in Signature-Agent header
-  publicKey: string  // Ed25519 public key as hex or JWK JSON string
+  name: string; // Project identifier — used in Signature-Agent header
+  publicKey: string; // Ed25519 public key as hex or JWK JSON string
 }
 ```
 
@@ -95,10 +95,10 @@ curl -X POST \
 
 **Errors:**
 
-| Status | Body | Meaning |
-|---|---|---|
-| `409` | `{"error":"project_exists"}` | A project with this name already exists |
-| `400` | `{"error":"invalid_public_key"}` | The public key format is invalid |
+| Status | Body                             | Meaning                                 |
+| ------ | -------------------------------- | --------------------------------------- |
+| `409`  | `{"error":"project_exists"}`     | A project with this name already exists |
+| `400`  | `{"error":"invalid_public_key"}` | The public key format is invalid        |
 
 ---
 
@@ -154,9 +154,9 @@ curl -H "Authorization: Bearer $OPAQUE_ADMIN_TOKEN" \
 
 **Query parameters:**
 
-| Parameter | Description |
-|---|---|
-| `env` | Filter by environment (optional) |
+| Parameter | Description                      |
+| --------- | -------------------------------- |
+| `env`     | Filter by environment (optional) |
 
 ```json
 [
@@ -206,10 +206,10 @@ curl -H "Authorization: Bearer $OPAQUE_ADMIN_TOKEN" \
 
 **Query parameters:**
 
-| Parameter | Description |
-|---|---|
-| `projectId` | Filter by project ID (optional) |
-| `limit` | Max entries to return (optional, default 100) |
+| Parameter   | Description                                   |
+| ----------- | --------------------------------------------- |
+| `projectId` | Filter by project ID (optional)               |
+| `limit`     | Max entries to return (optional, default 100) |
 
 ```json
 [
@@ -234,16 +234,16 @@ curl -H "Authorization: Bearer $OPAQUE_ADMIN_TOKEN" \
 
 **Action values:**
 
-| Action | When |
-|---|---|
-| `fetch` | Application fetched secrets via `GET /v1/secrets` |
+| Action   | When                                                    |
+| -------- | ------------------------------------------------------- |
+| `fetch`  | Application fetched secrets via `GET /v1/secrets`       |
 | `rotate` | Keypair rotated via `PUT /v1/admin/projects/:id/rotate` |
 
 ---
 
 ## SDK endpoints
 
-SDK endpoints are authenticated with RFC 9421 HTTP Message Signatures. The `@opaque/core` SDK handles signing automatically — you only need these endpoints if you are implementing a custom client.
+SDK endpoints are authenticated with RFC 9421 HTTP Message Signatures. The `@florianjs/opaque` SDK handles signing automatically — you only need these endpoints if you are implementing a custom client.
 
 ### Signature format
 
@@ -267,6 +267,7 @@ The signed message is:
 The signature is an Ed25519 signature over the UTF-8 encoded canonical message, base64-encoded.
 
 **Constraints:**
+
 - `created` must be within ±5 minutes of the vault's current time
 - `expires` is `created + 300` (5 minutes)
 - `nonce` must be a unique hex string (16 bytes / 32 hex chars) — replayed nonces are rejected for 10 minutes
@@ -278,9 +279,9 @@ The signature is an Ed25519 signature over the UTF-8 encoded canonical message, 
 Fetch and decrypt all secrets for the authenticated project and environment.
 
 ```bash
-# Normally called by @opaque/core — manual example:
+# Normally called by @florianjs/opaque — manual example:
 SIGNATURE_HEADERS=$(node -e "
-  const { signRequest } = require('@opaque/core/crypto')
+  const { signRequest } = require('@florianjs/opaque/crypto')
   signRequest({
     method: 'GET',
     url: 'http://localhost:4200/v1/secrets?env=production',
@@ -292,9 +293,9 @@ SIGNATURE_HEADERS=$(node -e "
 
 **Query parameters:**
 
-| Parameter | Description |
-|---|---|
-| `env` | Environment name (optional, default: `production`) |
+| Parameter | Description                                        |
+| --------- | -------------------------------------------------- |
+| `env`     | Environment name (optional, default: `production`) |
 
 **Response:**
 
@@ -308,14 +309,14 @@ SIGNATURE_HEADERS=$(node -e "
 
 **Authentication errors:**
 
-| Status | Body | Meaning |
-|---|---|---|
-| `401` | `{"error":"missing_signature"}` | Required signature headers not present |
-| `401` | `{"error":"unknown_project"}` | Project not found in the vault |
-| `401` | `{"error":"invalid_signature"}` | Signature verification failed |
-| `401` | `{"error":"expired"}` | Request outside the 5-minute window |
-| `401` | `{"error":"replayed_nonce"}` | This nonce was already used |
-| `429` | `{"error":"rate_limited"}` | Too many requests from this IP |
+| Status | Body                            | Meaning                                |
+| ------ | ------------------------------- | -------------------------------------- |
+| `401`  | `{"error":"missing_signature"}` | Required signature headers not present |
+| `401`  | `{"error":"unknown_project"}`   | Project not found in the vault         |
+| `401`  | `{"error":"invalid_signature"}` | Signature verification failed          |
+| `401`  | `{"error":"expired"}`           | Request outside the 5-minute window    |
+| `401`  | `{"error":"replayed_nonce"}`    | This nonce was already used            |
+| `429`  | `{"error":"rate_limited"}`      | Too many requests from this IP         |
 
 ---
 
@@ -326,9 +327,9 @@ Create or update a secret. If a secret with the same `projectId + key + env` alr
 ```ts
 // Request body
 {
-  key: string    // Secret name (e.g., "DATABASE_URL")
-  value: string  // Secret value — encrypted server-side before storage
-  env: string    // Environment (e.g., "production")
+  key: string; // Secret name (e.g., "DATABASE_URL")
+  value: string; // Secret value — encrypted server-side before storage
+  env: string; // Environment (e.g., "production")
 }
 ```
 

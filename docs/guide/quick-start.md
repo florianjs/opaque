@@ -4,10 +4,10 @@ Get a working opaque vault running locally in under 5 minutes.
 
 ## Prerequisites
 
-| Tool | Version | Install |
-|---|---|---|
-| **Bun** | >= 1.1 | `curl -fsSL https://bun.sh/install \| bash` |
-| **Vite+** (`vp`) | latest | `curl -fsSL https://vite.plus \| bash` |
+| Tool             | Version | Install                                     |
+| ---------------- | ------- | ------------------------------------------- |
+| **Bun**          | >= 1.1  | `curl -fsSL https://bun.sh/install \| bash` |
+| **Vite+** (`vp`) | latest  | `curl -fsSL https://vite.plus \| bash`      |
 
 Verify:
 
@@ -93,7 +93,7 @@ Visit **http://localhost:4200/ui** in your browser. On first visit, enter your `
 ## Step 6 — Install the CLI and register your first project
 
 ```bash
-npm install -g @opaque/cli
+npm install -g @florianjs/opaque-cli
 
 export OPAQUE_VAULT_URL="http://localhost:4200"
 export OPAQUE_ADMIN_TOKEN="<your admin token from Step 2>"
@@ -126,15 +126,15 @@ Pick the adapter for your framework:
 :::code-group
 
 ```bash [Node.js]
-npm install @opaque/node
+npm install @florianjs/opaque-node
 ```
 
 ```bash [Next.js]
-npm install @opaque/next
+npm install @florianjs/opaque-next
 ```
 
 ```bash [Nuxt]
-npm install @opaque/nuxt
+npm install @florianjs/opaque-nuxt
 ```
 
 :::
@@ -153,28 +153,28 @@ Add the bootstrap call:
 
 ```ts [Node.js — server.ts]
 // Must be the very first import
-import { bootstrap } from '@opaque/node'
-await bootstrap()
+import { bootstrap } from "@florianjs/opaque-node";
+await bootstrap();
 
 // All secrets are now in process.env
-import { startServer } from './app'
-startServer()
+import { startServer } from "./app";
+startServer();
 ```
 
 ```ts [Next.js — instrumentation.ts]
-import { register } from '@opaque/next'
-export { register }
+import { register } from "@florianjs/opaque-next";
+export { register };
 ```
 
 ```ts [Nuxt — nuxt.config.ts]
 export default defineNuxtConfig({
-  modules: ['@opaque/nuxt'],
+  modules: ["@florianjs/opaque-nuxt"],
   opaque: {
     vaultUrl: process.env.OPAQUE_VAULT_URL,
     privateKey: process.env.OPAQUE_PRIVATE_KEY,
     project: process.env.OPAQUE_PROJECT,
   },
-})
+});
 ```
 
 :::
